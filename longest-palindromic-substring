@@ -1,0 +1,56 @@
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        # even no. of chars -> indexes 0, len(s)-1
+        #                      1        , len(s)-2
+        # etc. must always match
+
+        # odd no. of chars -> indexes 0, len(s)-1
+        # ...
+        # and then the middle character is fine on its own
+
+        # expand around the center? check l and r from each char and keep expanding until no longer 
+        # a palindrome
+
+        # center can either be 1 or 2 chars, depending on odd or even palindromic substring
+
+        # O(n^2)
+
+        returnl = 0
+        returnr = 0
+
+        for i in range(len(s)):
+            center = i
+            l = i-1
+            r = i+1
+            while (l>=0) and (r < len(s)):
+                if s[l] == s[r]:
+                    if (r-l) > (returnr - returnl):
+                        returnl = l
+                        returnr = r
+                    l -= 1
+                    r += 1
+                else:
+                    break
+        
+        for i in range(len(s)):
+            centerl = i
+            centerr = i+1
+            l = i-1
+            r = i+2
+            if (centerl < 0) or (centerr >= len(s)) or (s[centerl] != s[centerr]):
+                continue
+            if (returnr - returnl) < 1:
+                returnr = centerr
+                returnl = centerl
+            while (l>=0) and (r < len(s)):
+                if s[l] == s[r]:
+                    if (r-l) > (returnr - returnl):
+                        returnl = l
+                        returnr = r
+                    l -= 1
+                    r += 1
+                else:
+                    break
+
+        return s[returnl:returnr+1]
+
